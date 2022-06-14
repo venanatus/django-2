@@ -1,0 +1,151 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="box has-text-centered" style="min-width: 100%">
+        {% if user == article.author %}
+            <div class="has-text-right">
+                <a href="{% url 'articles:edit_article' article.slug %}" class="button is-info">
+                    <ion-icon name="create-outline"></ion-icon>
+                </a>
+                <a href="{% url 'articles:delete_article' article.slug %}" class="button is-danger">
+                    <ion-icon name="trash-outline"></ion-icon>
+                </a>
+            </div>
+        {% else %}
+            <p class="has-text-right has-text-grey-light">
+                you cannot edit or delete this post
+            </p>
+        {% endif %}
+        <div class="title is-spaced">{{ article }}</div>
+        <img src="{{ article.thumb.url }}" alt="" style="min-width: 100%; border-radius: 5px">
+        {% if user not in article.likes.all and user not in article.dislikes.all %}
+            <div class="columns mt-3">
+                <div class="column is-1">
+                    <form action="{% url 'articles:like' article.slug %}" method="post" class="has-text-right">
+                        {% csrf_token %}
+                        <button class="button" type="submit">
+                            <ion-icon name="thumbs-up-outline"></ion-icon>
+                            <span class="ml-3">
+                            {{ article.total_likes }}
+                        </span>
+                        </button>
+                    </form>
+                </div>
+                <div class="column is-1">
+                    <form action="{% url 'articles:dislike' article.slug %}" method="post" class="has-text-right">
+                        {% csrf_token %}
+                        <button class="button" type="submit">
+                            <ion-icon name="thumbs-down-outline"></ion-icon>
+                            <span class="ml-3">
+                            {{ article.total_dislikes }}
+                        </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        {% if user in article.likes.all and user not in article.dislikes.all %}
+            <div class="columns mt-3">
+                <div class="column is-1">
+                    <form action="{% url 'articles:like' article.slug %}" method="post" class="has-text-right">
+                        {% csrf_token %}
+                        <button class="button is-success" type="submit">
+                            <ion-icon name="thumbs-up-outline"></ion-icon>
+                            <span class="ml-3">
+                            {{ article.total_likes }}
+                        </span>
+                        </button>
+                    </form>
+                </div>
+                <div class="column is-1">
+                    <form action="{% url 'articles:dislike' article.slug %}" method="post" class="has-text-right">
+                        {% csrf_token %}
+                        <button class="button" type="submit">
+                            <ion-icon name="thumbs-down-outline"></ion-icon>
+                            <span class="ml-3">
+                            {{ article.total_dislikes }}
+                        </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        {% if user not in article.likes.all and user in article.dislikes.all %}
+            <div class="columns mt-3">
+                <div class="column is-1">
+                    <form action="{% url 'articles:like' article.slug %}" method="post" class="has-text-right">
+                        {% csrf_token %}
+                        <button class="button" type="submit">
+                            <ion-icon name="thumbs-up-outline"></ion-icon>
+                            <span class="ml-3">
+                            {{ article.total_likes }}
+                        </span>
+                        </button>
+                    </form>
+                </div>
+                <div class="column is-1">
+                    <form action="{% url 'articles:dislike' article.slug %}" method="post" class="has-text-right">
+                        {% csrf_token %}
+                        <button class="button is-danger" type="submit">
+                            <ion-icon name="thumbs-down-outline"></ion-icon>
+                            <span class="ml-3">
+                            {{ article.total_dislikes }}
+                        </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        <div class="has-text-right mt-4">
+            <div class="title is-4">Published by {{ article.author }}</div>
+            <div class="subtitle is-6">{{ article.date }}</div>
+        </div>
+        <div class="subtitle mt-6">{{ article.text }}</div>
+        <hr>
+        {% if not article.comment_set.all %}
+            <div class="title has-text-grey-light is-4">
+                Комментариев пока нет, будьте первым кто его оставит
+            </div>
+        {% else %}
+            <div class="title has-text-grey-light is-4">
+                Комментарии
+            </div>
+            <div class="columns is-multiline">
+                {% for comment in article.comment_set.all %}
+                    <div class="column is-5">
+                        <article class="message is-info">
+                            <div class="message-header">
+                                {% if user == comment.user %}
+                                    <p>Added by you at {{ comment.date_added }}</p>
+                                {% else %}
+                                    <p>Added by {{ comment.user }} at {{ comment.date_added }}</p>
+                                {% endif %}
+                                {% if user == comment.user %}
+                                    <div class="has-text-right">
+                                        <a href="{% url 'articles:edit_comment' comment.pk %}" class="button is-info"
+                                           style="text-decoration: none">
+                                            <ion-icon name="create-outline"></ion-icon>
+                                        </a>
+                                        <a href="{% url 'articles:delete_comment' comment.pk %}" class="button is-info"
+                                           style="text-decoration: none">
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="message-body">
+                                {{ comment.body }}
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form method="post" class="comment" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button class="button is-success is-fullwidth mt-3" type="submit">Отправить</button>
+        </form>
+    </div>
+{% endblock %}

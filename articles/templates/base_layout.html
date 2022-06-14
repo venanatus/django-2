@@ -1,0 +1,76 @@
+{% load static from static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static "style.css" %}">
+    <link rel="stylesheet" href="{% static "bulma.css" %}">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+<section class="hero has-background-info is-fullheight">
+    <div class="hero-head">
+        <header class="navbar">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="{% url 'articles:home' %}">
+                        <img src="https://macademy.uz/assets/img/monday.svg" width="100" alt="Logo">
+                    </a>
+                    <span class="navbar-burger" data-target="navbarMenuHeroC">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </div>
+                <div id="navbarMenuHeroC" class="navbar-menu">
+                    {% if user.is_authenticated %}
+                        <div class="navbar-start">
+                        <span class="navbar-item">
+                            <a href="{% url 'articles:article_create' %}"
+                               class="button is-info is-inverted is-outlined">
+                                <span class="mr-2">
+                                    <ion-icon name="book-outline"></ion-icon>
+                                </span>
+                                <span>
+                                    Создать пост
+                                </span>
+                            </a>
+                        </span>
+                        </div>
+                        <div class="navbar-end">
+                            <form action="{% url 'articles:home' %}" method="get">
+                                <div class="field has-addons mt-4 mr-3">
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Find a repository" name="search">
+                                    </div>
+                                    <div class="control">
+                                        <button class="button is-primary" type="submit">
+                                            Search
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <span class="navbar-item">
+                                <button class="button is-disabled">Welcome: {{ user }}</button>
+                            </span>
+                            <span class="navbar-item">
+                            <a href="{% url 'users:sign_out' %}" class="button is-info is-outlined is-inverted">
+                                Sign out
+                            </a>
+                        </span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+    </div>
+    <div class="hero-body">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</section>
+</body>
+</html>
+

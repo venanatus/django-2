@@ -1,0 +1,13 @@
+{% extends "base_layout.html" %}
+
+{% block content %}
+    <form class="site-form has-background-light" method="post" enctype="multipart/form-data">
+    <div class="title">Edit Article</div>
+        {% csrf_token %}
+        {{ form }}
+        <div class="has-text-centered my-2">
+            <button type="submit" class="button is-success">Отправить</button>
+            <a href="{% url 'articles:article_detail' article.slug %}" class="button is-danger">Отмена</a>
+        </div>
+    </form>
+{% endblock %}

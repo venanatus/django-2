@@ -1,0 +1,53 @@
+{% load static from static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static "bulma.css" %}">
+</head>
+<body>
+<section class="hero has-background-info is-fullheight">
+    <div class="hero-head">
+        <header class="navbar">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="{% url 'articles:home' %}">
+                        <img src="https://macademy.uz/assets/img/monday.svg" width="100" alt="Logo">
+                    </a>
+                    <span class="navbar-burger" data-target="navbarMenuHeroC">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </div>
+            </div>
+        </header>
+    </div>
+    <div class="hero-body">
+        <div class="columns is-centered">
+            <div class="column is-6">
+                <div class="box has-text-centered">
+                    {% if article %}
+                        <div class="title">Вы не можете удалить или изменить данный пост, так как вы не являетесь
+                            автором
+                            этого поста
+                        </div>
+                        <a href="{% url 'articles:home' %}" class="button is-success is-fullwidth">
+                            Вернутся на главную
+                        </a>
+                    {% else %}
+                        <div class="title is-4">Вы не можете удалить или изменить данный комментарий, так как вы не являетесь
+                            автором этого комментария
+                        </div>
+                        <a href="{% url 'articles:article_detail' comment.article.slug %}" class="button is-success is-fullwidth">
+                            Вернутся на страницу поста
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
+

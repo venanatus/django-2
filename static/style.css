@@ -1,0 +1,32 @@
+.site-form {
+    padding: 20px;
+    display: block;
+    margin: 70px auto auto;
+    width: 40%;
+    border-radius: 10px;
+}
+
+#thumb-clear_id {
+    display: none;
+}
+
+label[for="thumb-clear_id"] {
+    display: none;
+}
+
+.helptext, .helptext.ul {
+    margin: 0 auto 20px;
+    color: grey;
+    font-size: 15px;
+    display: block;
+}
+
+.errorlist {
+    padding: 10px;
+    list-style: none;
+    color: red;
+}
+
+.comment label[for="id_body"] {
+    display: none;
+}
